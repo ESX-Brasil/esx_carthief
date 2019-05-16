@@ -1,5 +1,6 @@
 Locales['es'] = {
   ['vehicle_robbery'] = 'robo de Vehículo!',
+  ['delivery_point'] = 'Lugar de entrega',
   ['mission_failed'] = 'misión Fallida!',
   ['get_back_car_10s'] = 'tienes 10 segundos para volver al vehículo',
   ['get_back_car_1m'] = 'tienes 1 minuto para volver al vehículo',

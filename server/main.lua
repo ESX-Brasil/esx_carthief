@@ -11,8 +11,8 @@ AddEventHandler('esx_carthief:pay', function(payment)
 	local _source = source
 	local xPlayer = ESX.GetPlayerFromId(_source)
 	xPlayer.addAccountMoney('black_money',tonumber(payment))
-	
-	--Add cooldown
+
+	--Adicionar cooldown
 	cooldown = Config.CooldownMinutes * 60000
 end)
 
@@ -39,7 +39,7 @@ AddEventHandler('esx_carthief:registerActivity', function(value)
 	activity = value
 	if value == 1 then
 		activitySource = source
-		--Send notification to cops
+		--Enviar notificação para os policiais
 		local xPlayers = ESX.GetPlayers()
 		for i=1, #xPlayers, 1 do
 			local xPlayer = ESX.GetPlayerFromId(xPlayers[i])
@@ -57,7 +57,7 @@ AddEventHandler('esx_carthief:alertcops', function(cx,cy,cz)
 	local source = source
 	local xPlayer = ESX.GetPlayerFromId(source)
 	local xPlayers = ESX.GetPlayers()
-	
+
 	for i=1, #xPlayers, 1 do
 		local xPlayer = ESX.GetPlayerFromId(xPlayers[i])
 		if xPlayer.job.name == 'police' then
@@ -71,7 +71,7 @@ AddEventHandler('esx_carthief:stopalertcops', function()
 	local source = source
 	local xPlayer = ESX.GetPlayerFromId(source)
 	local xPlayers = ESX.GetPlayers()
-	
+
 	for i=1, #xPlayers, 1 do
 		local xPlayer = ESX.GetPlayerFromId(xPlayers[i])
 		if xPlayer.job.name == 'police' then
@@ -83,7 +83,7 @@ end)
 AddEventHandler('playerDropped', function ()
 	local _source = source
 	if _source == activitySource then
-		--Remove blip for all cops
+		--Remover blip para todos os policiais
 		local xPlayers = ESX.GetPlayers()
 		for i=1, #xPlayers, 1 do
 			local xPlayer = ESX.GetPlayerFromId(xPlayers[i])
@@ -91,13 +91,13 @@ AddEventHandler('playerDropped', function ()
 				TriggerClientEvent('esx_carthief:removecopblip', xPlayers[i])
 			end
 		end
-		--Set activity to 0
+		--Definir atividade para 0
 		activity = 0
 		activitySource = 0
 	end
 end)
 
---Cooldown manager
+--Gerente de recarga
 AddEventHandler('onResourceStart', function(resource)
 	while true do
 		Wait(5000)

@@ -32,7 +32,7 @@ AddEventHandler('esx:setJob', function(job)
   PlayerData.job = job
 end)
 
---Add all deliveries to the table
+--Adicione todas as entregas à mesa
 Citizen.CreateThread(function()
 	local deliveryids = 1
 	for k,v in pairs(Config.Delivery) do
@@ -44,7 +44,7 @@ Citizen.CreateThread(function()
 				payment = v.Payment,
 				car = v.Cars,
 		})
-		deliveryids = deliveryids + 1  
+		deliveryids = deliveryids + 1
 	end
 end)
 
@@ -55,22 +55,22 @@ function SpawnCar()
 				ESX.TriggerServerCallback('esx_carthief:anycops', function(anycops)
 					if anycops >= Config.CopsRequired then
 
-						--Get a random delivery point
+						--Obter um ponto de entrega aleatório
 						randomdelivery = math.random(1,#alldeliveries)
-						
-						--Delete vehicles around the area (not sure if it works)
+
+						--Excluir veículos ao redor da área (não tenho certeza se funciona)
 						ClearAreaOfVehicles(Config.VehicleSpawnPoint.Pos.x, Config.VehicleSpawnPoint.Pos.y, Config.VehicleSpawnPoint.Pos.z, 10.0, false, false, false, false, false)
-						
-						--Delete old vehicle and remove the old blip (or nothing if there's no old delivery)
+
+						--Exclua o veículo antigo e remova o blip antigo (ou nada, se não houver entrega antiga)
 						SetEntityAsNoLongerNeeded(car)
 						DeleteVehicle(car)
 						RemoveBlip(deliveryblip)
-						
 
-						--Get random car
+
+						--Obter carro aleatório
 						randomcar = math.random(1,#alldeliveries[randomdelivery].car)
 
-						--Spawn Car
+						--Carro de Spawn
 						local vehiclehash = GetHashKey(alldeliveries[randomdelivery].car[randomcar])
 						RequestModel(vehiclehash)
 						while not HasModelLoaded(vehiclehash) do
@@ -79,11 +79,11 @@ function SpawnCar()
 						end
 						car = CreateVehicle(vehiclehash, Config.VehicleSpawnPoint.Pos.x, Config.VehicleSpawnPoint.Pos.y, Config.VehicleSpawnPoint.Pos.z, 0.0, true, false)
 						SetEntityAsMissionEntity(car, true, true)
-						
-						--Teleport player in car
+
+						--Teleport jogador no carro
 						TaskWarpPedIntoVehicle(GetPlayerPed(-1), car, -1)
-						
-						--Set delivery blip
+
+						--Definir aviso de entrega
 						deliveryblip = AddBlipForCoord(alldeliveries[randomdelivery].posx, alldeliveries[randomdelivery].posy, alldeliveries[randomdelivery].posz)
 						SetBlipSprite(deliveryblip, 1)
 						SetBlipDisplay(deliveryblip, 4)
@@ -91,18 +91,18 @@ function SpawnCar()
 						SetBlipColour(deliveryblip, 5)
 						SetBlipAsShortRange(deliveryblip, true)
 						BeginTextCommandSetBlipName("STRING")
-						AddTextComponentString("Ponto de entrega")
+						AddTextComponentString(_U('delivery_point')) --("Ponto de entrega")
 						EndTextCommandSetBlipName(deliveryblip)
-						
+
 						SetBlipRoute(deliveryblip, true)
 
-						--Register acitivity for server
+						--Registrar atividade para o servidor
 						TriggerServerEvent('esx_carthief:registerActivity', 1)
-						
-						--For delivery blip
+
+						--Para entrega blip
 						isTaken = 1
-						
-						--For delivery blip
+
+						--Para entrega blip
 						isDelivered = 0
 					else
 						ESX.ShowNotification(_U('not_enough_cops'))
@@ -119,57 +119,57 @@ end
 
 function FinishDelivery()
   if(GetVehiclePedIsIn(GetPlayerPed(-1), false) == car) and GetEntitySpeed(car) < 3 then
-		
-		--Delete Car
+
+		--Excluir carro
 		SetEntityAsNoLongerNeeded(car)
 		DeleteEntity(car)
-		
-    --Remove delivery zone
+
+    --Remover zona de entrega
     RemoveBlip(deliveryblip)
 
-    --Pay the poor fella
+    --Pague o pobre coitado
 		local finalpayment = alldeliveries[randomdelivery].payment
 		TriggerServerEvent('esx_carthief:pay', finalpayment)
 
-		--Register Activity
+		--Registrar atividade
 		TriggerServerEvent('esx_carthief:registerActivity', 0)
 
-    --For delivery blip
+    --Para entrega blip
     isTaken = 0
 
-    --For delivery blip
+    --Para entrega blip
     isDelivered = 1
-		
-		--Remove Last Cop Blips
+
+		--Remover últimos golpes de polícia
     TriggerServerEvent('esx_carthief:stopalertcops')
-		
+
   else
 		TriggerEvent('esx:showNotification', _U('car_provided_rule'))
   end
 end
 
 function AbortDelivery()
-	--Delete Car
+	--Excluir carro
 	SetEntityAsNoLongerNeeded(car)
 	DeleteEntity(car)
 
-	--Remove delivery zone
+	--Remover zona de entrega
 	RemoveBlip(deliveryblip)
 
-	--Register Activity
+	--Registrar atividade
 	TriggerServerEvent('esx_carthief:registerActivity', 0)
 
-	--For delivery blip
+	--Para entrega blip
 	isTaken = 0
 
-	--For delivery blip
+	--Para entrega blip
 	isDelivered = 1
 
-	--Remove Last Cop Blips
+	--Remover últimos golpes de polícia
 	TriggerServerEvent('esx_carthief:stopalertcops')
 end
 
---Check if player left car
+--Verifique se o jogador saiu do carro
 Citizen.CreateThread(function()
   while true do
     Wait(1000)
@@ -186,7 +186,7 @@ Citizen.CreateThread(function()
 	end
 end)
 
--- Send location
+-- Enviar localização
 Citizen.CreateThread(function()
   while true do
     Citizen.Wait(Config.BlipUpdateTime)
@@ -236,28 +236,28 @@ AddEventHandler('esx_carthief:hasExitedMarker', function(zone)
 	ESX.UI.Menu.CloseAll()
 end)
 
--- Enter / Exit marker events
+-- Enter / Sair dos eventos do marcador
 Citizen.CreateThread(function()
   while true do
 		Wait(0)
 		local coords      = GetEntityCoords(GetPlayerPed(-1))
 		local isInMarker  = false
 		local currentZone = nil
-    
-      
+
+
 		if(GetDistanceBetweenCoords(coords, Config.Zones.VehicleSpawner.Pos.x, Config.Zones.VehicleSpawner.Pos.y, Config.Zones.VehicleSpawner.Pos.z, true) < 3) then
 			isInMarker  = true
 			currentZone = 'menucarthief'
 			LastZone    = 'menucarthief'
 		end
-      
+
 		if isTaken == 1 and (GetDistanceBetweenCoords(coords, alldeliveries[randomdelivery].posx, alldeliveries[randomdelivery].posy, alldeliveries[randomdelivery].posz, true) < 3) then
 			isInMarker  = true
 			currentZone = 'cardelivered'
 			LastZone    = 'cardelivered'
 		end
-        
-      
+
+
 		if isInMarker and not HasAlreadyEnteredMarker then
 			HasAlreadyEnteredMarker = true
 			TriggerEvent('esx_carthief:hasEnteredMarker', currentZone)
@@ -269,7 +269,7 @@ Citizen.CreateThread(function()
 	end
 end)
 
--- Key Controls
+-- Controles Chave
 Citizen.CreateThread(function()
   while true do
     Citizen.Wait(0)
@@ -289,22 +289,22 @@ Citizen.CreateThread(function()
   end
 end)
 
--- Display markers
+-- Mostrar marcadores
 Citizen.CreateThread(function()
   while true do
     Wait(0)
     local coords = GetEntityCoords(GetPlayerPed(-1))
-    
+
     for k,v in pairs(Config.Zones) do
 			if (v.Type ~= -1 and GetDistanceBetweenCoords(coords, v.Pos.x, v.Pos.y, v.Pos.z, true) < Config.DrawDistance) then
 				DrawMarker(v.Type, v.Pos.x, v.Pos.y, v.Pos.z, 0.0, 0.0, 0.0, 0, 0.0, 0.0, v.Size.x, v.Size.y, v.Size.z, v.Color.r, v.Color.g, v.Color.b, 100, false, true, 2, false, false, false, false)
 			end
 		end
-    
+
   end
 end)
 
--- Display markers for delivery place
+-- Exibir marcadores para o local de entrega
 Citizen.CreateThread(function()
   while true do
     Wait(0)
@@ -318,7 +318,7 @@ Citizen.CreateThread(function()
   end
 end)
 
--- Create Blips for Car Spawner
+-- Criar Blips para o Spawner do Carro
 Citizen.CreateThread(function()
     info = Config.Zones.VehicleSpawner
     info.blip = AddBlipForCoord(info.Pos.x, info.Pos.y, info.Pos.z)
@@ -328,6 +328,6 @@ Citizen.CreateThread(function()
     SetBlipColour(info.blip, info.Colour)
     SetBlipAsShortRange(info.blip, true)
     BeginTextCommandSetBlipName("STRING")
-	AddTextComponentString(_U('roubo de veículo'))
+	AddTextComponentString(_U('vehicle_robbery'))
     EndTextCommandSetBlipName(info.blip)
 end)
