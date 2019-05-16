@@ -1,23 +1,24 @@
 # esx_carthief
-## Description
-Car thief script for ESX FiveM servers. Players can steal a car that they will have to deliver to a location in order to obtain some dirty money. Police will be alerted and updated with their location as long as they sit in the stolen vehicle.
+## Descrição
+Ladrão de carros para servidores ESX FiveM. Os jogadores podem roubar um carro que eles terão que entregar em um local para obter algum dinheiro sujo. A polícia será alertada e atualizada com a sua localização, desde que esteja no veículo roubado.
 
-Note: This is NOT a job. This is an illegal activity anyone can do.
-## Dependencies
-* [es_extended](https://github.com/ESX-Org/es_extended)
-* [esx_policejob](https://github.com/ESX-Org/esx_policejob)
-## Setup
-* Install into resources/[esx]
-* Add the following line to your server.cfg
+Nota: Este não é um trabalho. Esta é uma atividade ilegal que qualquer um pode fazer.
+## Dependências
+* [es_extended](https://github.com/ESX-Brasil/es_extended)
+* [esx_policejob](https://github.com/ESX-Brasil/esx_policejob)
+## Configuração
+* instalar em resources/[esx]
+* Adicione a seguinte linha ao seu server.cfg
 ```
 start esx_carthief
 ```
 
-* If you want to change the stolen vehicle location update time, you have to set `Config.BlipUpdateTime` to whatever time you would like in milliseconds in `config.lua`.
-* If you want to change the number of cops online required to steal a car, you have to set `Config.CopsRequired` to the amount of cops you would like in `config.lua`.
+* Se você quiser alterar o tempo de atualização do local do veículo roubado, você deve definir o `Config.BlipUpdateTime` para qualquer hora que desejar em milissegundos no` config.lua`.
+* Se você quiser alterar o número de policiais on-line necessários para roubar um carro, você precisa configurar `Config.Cops Required` para a quantidade de policiais que deseja em` config.lua`.
+
 ## Screenshots
-### In front of the marker
+### Na frente do marcador
 ![screenshot](https://i.imgur.com/BoqYPHj.jpg)
 ##
-### Little explanation
+### Pequena explicação
 ![screenshot](https://i.imgur.com/maaWc4i.jpg)
